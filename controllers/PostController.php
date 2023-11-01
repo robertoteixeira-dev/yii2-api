@@ -41,20 +41,21 @@ class PostController extends Controller
 
     public function actionCreate()
     {
-        $model = new Post();
+        $post = new Post();
 
-        if ($model->load(Yii::$app->request->bodyParams, '') && $model->save()) {
+        if ($post->load(Yii::$app->request->bodyParams, '') && $post->save()) {
+            Yii::$app->response->setStatusCode(201);
             return [
                 'status' => 'success',
                 'message' => 'Post created successfully.',
-                'data' => $model,
+                'data' => $post,
             ];
         } else {
             Yii::$app->response->statusCode = 422;
             return [
                 'status' => 'error',
                 'message' => 'Failed to save the post.',
-                'errors' => $model->getErrors(),
+                'errors' => $post->getErrors(),
             ];
         }
     }
@@ -62,6 +63,7 @@ class PostController extends Controller
     public function actionUpdate(Post $post)
     {
         if ($post->load(Yii::$app->request->bodyParams, '') && $post->save()) {
+            Yii::$app->response->setStatusCode(201);
             return [
                 'status' => 'success',
                 'message' => 'Post updated successfully.',
@@ -80,6 +82,7 @@ class PostController extends Controller
     public function actionDelete(Post $post)
     {
         if ($post->delete()) {
+            Yii::$app->response->setStatusCode(201);
             return [
                 'status' => 'success',
                 'message' => 'Post deleted successfully.',

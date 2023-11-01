@@ -3,6 +3,7 @@
 namespace app\models;
 
 use yii\behaviors\TimestampBehavior;
+use yii2tech\softdelete\SoftDeleteBehavior;
 use yii\db\ActiveRecord;
 
 class Post extends ActiveRecord
@@ -14,6 +15,11 @@ class Post extends ActiveRecord
     public $created_at;
     public $updated_at;
     public $deleted_at;
+
+    public static function tableName()
+    {
+        return '{{%post}}';
+    }
 
     public function rules()
     {
@@ -31,12 +37,14 @@ class Post extends ActiveRecord
                 'class' => TimestampBehavior::class,
                 'updatedAtAttribute' => 'updated_at',
             ],
+            'softDelete' => [
+                'class' => SoftDeleteBehavior::class,
+                'softDeleteAttributeValues' => [
+                    'deleted_at' => time(),
+                ],
+                'replaceRegularDelete' => true,
+            ],
         ];
-    }
-
-    public static function tableName()
-    {
-        return '{{%post}}';
     }
 
     public function getUser()
