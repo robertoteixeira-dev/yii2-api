@@ -4,38 +4,20 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Post;
-use yii\web\Controller;
-use yii\web\Response;
-use yii\filters\VerbFilter;
+use yii\rest\ActiveController;
 
-class PostController extends Controller
+class PostController extends ActiveController
 {
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::class,
-                'actions' => [
-                    'index' => ['GET'],
-                    'view' => ['GET'],
-                    'create' => ['POST'],
-                    'update' => ['PUT', 'PATCH'],
-                    'delete' => ['DELETE'],
-                ],
-            ],
-        ];
-    }
+    public $modelClass = 'app\models\Post';
 
     public function actionIndex()
     {
-        Yii::$app->response->format = Response::FORMAT_JSON;
         $posts = Post::find()->all();
         return $posts;
     }
 
     public function actionView(Post $post)
     {
-        Yii::$app->response->format = Response::FORMAT_JSON;
         return $post;
     }
 
@@ -48,7 +30,7 @@ class PostController extends Controller
             return [
                 'status' => 'success',
                 'message' => 'Post created successfully.',
-                'data' => $post,
+                'post' => $post,
             ];
         } else {
             Yii::$app->response->statusCode = 422;
@@ -67,7 +49,7 @@ class PostController extends Controller
             return [
                 'status' => 'success',
                 'message' => 'Post updated successfully.',
-                'data' => $post,
+                'post' => $post,
             ];
         } else {
             Yii::$app->response->statusCode = 422;
